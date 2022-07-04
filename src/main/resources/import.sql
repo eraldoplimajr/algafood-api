@@ -11,10 +11,11 @@ insert into forma_pagamento (descricao) values ('Débito');
 insert into forma_pagamento (descricao) values ('Crédito');
 insert into forma_pagamento (descricao) values ('Pix');
 
-insert into cidade (nome) values ('Recife');
-insert into cidade (nome) values ('São Paulo');
-insert into cidade (nome) values ('Rio de Janeiro');
-
 insert into estado (nome) values ('Pernambuco');
-insert into estado (nome) values ('Minas Gerais');
 insert into estado (nome) values ('São Paulo');
+insert into estado (nome) values ('Minas Gerais');
+
+insert into cidade (nome, estado_id) values ('Recife', 1);
+insert into cidade (nome, estado_id) values ('Olinda', 1);
+insert into cidade (nome, estado_id) values ('São Paulo', 2);
+insert into cidade (nome, estado_id) values ('Belo Horizonte', 3);
