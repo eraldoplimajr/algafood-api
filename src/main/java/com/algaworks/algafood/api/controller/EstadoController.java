@@ -45,7 +45,7 @@ public class EstadoController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
 	public Estado adicionar(@RequestBody Estado estado) {
-		return cadastroEstado.salvar(estado);		
+		return cadastroEstado.salvar(estado);
 	}
 	
 	@PutMapping("/{estadoId}")
@@ -61,7 +61,7 @@ public class EstadoController {
 	@DeleteMapping("/{estadoId}")
 	public ResponseEntity<?> remover(@PathVariable Long estadoId) {
 		
-		try{			
+		try{
 			cadastroEstado.remover(estadoId);
 			
 			return ResponseEntity.noContent().build();
