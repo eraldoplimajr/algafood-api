@@ -7,13 +7,10 @@ import org.springframework.stereotype.Service;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
-import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 
 @Service
 public class CadastroRestauranteService {
-	
-	private static final String MSG_COZINHA_NAO_CADASTRADA = "Cozinha não cadastrada com o código %d";
 
 	private static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Restaurante não encontrado com o código %d";
 
@@ -21,14 +18,13 @@ public class CadastroRestauranteService {
 	private RestauranteRepository restauranteRepository;
 	
 	@Autowired
-	private CozinhaRepository cozinhaRepository;
+	private CadastroCozinhaService cadastroCozinha;
 	
 	public Restaurante salvar(Restaurante restaurante) {
 		
 		Long cozinhaId = restaurante.getCozinha().getId();
 
-		Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() -> new EntidadeNaoEncontradaException(
-				String.format(MSG_COZINHA_NAO_CADASTRADA, cozinhaId)));
+		Cozinha cozinha = cadastroCozinha.buscarOuFalhar(cozinhaId);
 
 		restaurante.setCozinha(cozinha);
 
