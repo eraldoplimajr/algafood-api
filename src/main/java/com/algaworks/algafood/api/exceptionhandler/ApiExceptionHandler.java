@@ -24,14 +24,16 @@ import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
+	public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocoreu um erro interno inesperado no sitema. "
+			+ "Tente novamente e se o problema persistir, entre em contato com o administrador do sistema.";
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest request){
 		
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;		
 		ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
 		
-		String detail = "Ocoreu um erro interno inesperado no sitema. "
-				+ "Tente novamente e se o problema persistir, entre em contato com o administrador do sistema.";
+		String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
 		
 		ex.getStackTrace();
 		
@@ -110,7 +112,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
 		String detail = String.format("A propriedade '%s' não existe. Favor ajustar ou retirar da requisição", path);
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();		
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+				.build();		
 		
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
@@ -126,7 +130,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = String.format("A propriedade '%s' recebeu o valor '%s', que é de um tipo inválido. "
 				+ "Corrija e informe um valor compatível com o tipo '%s'.", path, ex.getValue(), ex.getTargetType().getSimpleName());
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();		
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+				.build();		
 		
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
@@ -162,7 +168,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
 		String detail = ex.getMessage();
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
 		
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
