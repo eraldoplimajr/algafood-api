@@ -5,8 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.validation.ConstraintViolationException;
 
 @SpringBootTest
 public class CadastroCozinhaIntegrationTests {
@@ -14,6 +17,7 @@ public class CadastroCozinhaIntegrationTests {
     @Autowired
     private CadastroCozinhaService cadastroCozinha;
 
+    @Test
     public void testarCadastroCozinhaComSucesso() {
 
         // cenário
@@ -25,6 +29,18 @@ public class CadastroCozinhaIntegrationTests {
 
         // validação
         assertNotNull(novaCozinha);
+        assertNotNull(novaCozinha.getId());
+    }
+
+    @Test
+    public void testarCadastroCozinhaSemNome() {
+
+        Cozinha novaCozinha = new Cozinha();
+        novaCozinha.setNome(null);
+
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            cadastroCozinha.salvar(novaCozinha);
+        });
 
     }
 
