@@ -36,7 +36,6 @@ public class CadastroCozinhaIT {
     private String bodyJsonCozinhaInput;
     Cozinha cozinhaAmericana;
 
-
     @BeforeEach
     public void setUp() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
