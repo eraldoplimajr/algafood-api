@@ -1,0 +1,7 @@
+{
+  "nome": "Pizzaria la massa",
+  "taxaFrete": 5,
+  "cozinha": {
+    "id": 1
+  }
+}
