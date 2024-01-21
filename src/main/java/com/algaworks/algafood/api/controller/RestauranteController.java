@@ -9,11 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.algaworks.algafood.api.converter.RestauranteModelConverter;
-import com.algaworks.algafood.api.model.CozinhaModel;
+import com.algaworks.algafood.api.converter.RestauranteModelObjectConverter;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.CozinhaIdInput;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
-import com.algaworks.algafood.domain.model.Cozinha;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +58,9 @@ public class RestauranteController {
 
 	@Autowired
 	private RestauranteModelConverter restauranteModelConverter;
+
+	@Autowired
+	private RestauranteModelObjectConverter restauranteModelObjectConverter;
 	
 	@GetMapping
 	public List<RestauranteModel> listar() {
@@ -77,7 +79,7 @@ public class RestauranteController {
 	public RestauranteModel adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 		try {
 
-			Restaurante restaurante = toDomainObject(restauranteInput);
+			Restaurante restaurante = restauranteModelObjectConverter.toDomainObject(restauranteInput);
 
 			return restauranteModelConverter.toModel(cadastroRestaurante.salvar(restaurante));
 		} catch (EntidadeNaoEncontradaException e) {
@@ -90,7 +92,7 @@ public class RestauranteController {
 	public RestauranteModel atualizar(@PathVariable Long restauranteId, @RequestBody @Valid RestauranteInput restauranteInput) {
 
 		try {
-			Restaurante restaurante = toDomainObject(restauranteInput);
+			Restaurante restaurante = restauranteModelObjectConverter.toDomainObject(restauranteInput);
 			Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
 			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");
@@ -177,18 +179,4 @@ public class RestauranteController {
 		
 	}
 
-	private Restaurante toDomainObject(RestauranteInput restauranteInput) {
-
-		Restaurante restaurante = new Restaurante();
-		restaurante.setNome(restauranteInput.getNome());
-		restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
-
-		Cozinha cozinha = new Cozinha();
-		cozinha.setId(restauranteInput.getCozinha().getId());
-
-		restaurante.setCozinha(cozinha);
-
-		return restaurante;
-
-	}
 }
