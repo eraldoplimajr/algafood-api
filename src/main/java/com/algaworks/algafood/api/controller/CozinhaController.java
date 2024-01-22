@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.api.converter.CozinhaModelConverter;
+import com.algaworks.algafood.api.converter.CozinhaModelObjectConverter;
+import com.algaworks.algafood.api.model.CozinhaModel;
+import com.algaworks.algafood.api.model.input.CozinhaInput;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,32 +34,39 @@ public class CozinhaController {
 	
 	@Autowired
 	private CadastroCozinhaService cadastroCozinha;
+
+	@Autowired
+	private CozinhaModelConverter cozinhaModelConverter;
+
+	@Autowired
+	private CozinhaModelObjectConverter cozinhaModelObjectConverter;
 	
 	@GetMapping
-	public List<Cozinha> listar(){
-		return cozinhaRepository.findAll();
+	public List<CozinhaModel> listar(){
+		return cozinhaModelConverter.toCollectionModel(cozinhaRepository.findAll());
 	}
 	
 	@GetMapping("/{cozinhaId}")
-	public Cozinha buscar(@PathVariable Long cozinhaId){
-		return cadastroCozinha.buscarOuFalhar(cozinhaId);		
+	public CozinhaModel buscar(@PathVariable Long cozinhaId){
+		return cozinhaModelConverter.toModel(cadastroCozinha.buscarOuFalhar(cozinhaId));
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cozinha adicionar(@RequestBody @Valid Cozinha cozinha) {
+	public Cozinha adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
+		Cozinha cozinha = cozinhaModelObjectConverter.toDomainObject(cozinhaInput);
 		return cadastroCozinha.salvar(cozinha);
 	}
 	
 	@PutMapping("/{cozinhaId}")
-	public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid Cozinha cozinha) {
+	public CozinhaModel atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaInput cozinhaInput) {
 
 		Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
 
-		BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+		cozinhaModelObjectConverter.copyToDomainObject(cozinhaInput, cozinhaAtual);
 
-		return cadastroCozinha.salvar(cozinhaAtual);
-	}	
+		return cozinhaModelConverter.toModel(cadastroCozinha.salvar(cozinhaAtual));
+	}
 	
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
