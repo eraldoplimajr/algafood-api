@@ -92,10 +92,9 @@ public class RestauranteController {
 	public RestauranteModel atualizar(@PathVariable Long restauranteId, @RequestBody @Valid RestauranteInput restauranteInput) {
 
 		try {
-			Restaurante restaurante = restauranteModelObjectConverter.toDomainObject(restauranteInput);
 			Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
-			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");
+			restauranteModelObjectConverter.copyToDomainObject(restauranteInput, restauranteAtual);
 
 			return restauranteModelConverter.toModel(cadastroRestaurante.salvar(restauranteAtual));
 		} catch (EntidadeNaoEncontradaException e) {

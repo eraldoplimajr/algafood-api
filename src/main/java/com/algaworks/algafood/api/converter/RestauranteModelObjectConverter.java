@@ -17,4 +17,13 @@ public class RestauranteModelObjectConverter {
         return modelMapper.map(restauranteInput, Restaurante.class);
     }
 
+    public void copyToDomainObject(RestauranteInput restauranteInput, Restaurante restaurante) {
+
+        // para evitar org.hibernate.HibernateException:
+        // identifier of an instance of com.algaworks.algafood.domain.model.Cozinha was altered from 2 to 1
+        restaurante.setCozinha(new Cozinha());
+
+        modelMapper.map(restauranteInput, restaurante);
+    }
+
 }
