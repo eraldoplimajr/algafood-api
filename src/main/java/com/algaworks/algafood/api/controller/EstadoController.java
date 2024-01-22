@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.api.converter.EstadoModelConverter;
+import com.algaworks.algafood.api.converter.EstadoModelObjectConverter;
+import com.algaworks.algafood.api.model.EstadoModel;
+import com.algaworks.algafood.api.model.input.EstadoInput;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,29 +34,40 @@ public class EstadoController {
 	
 	@Autowired
 	private CadastroEstadoService cadastroEstado;
+
+	@Autowired
+	private EstadoModelConverter estadoModelConverter;
+
+	@Autowired
+	private EstadoModelObjectConverter estadoModelObjectConverter;
 	
 	@GetMapping
-	public List<Estado> listar(){
-		return estadoRepository.findAll();
+	public List<EstadoModel> listar(){
+		return estadoModelConverter.toCollectionModel(estadoRepository.findAll());
 	}
 	
 	@GetMapping("/{estadoId}")
-	public Estado buscar(@PathVariable Long estadoId) {
-		return cadastroEstado.buscarOuFalhar(estadoId);
+	public EstadoModel buscar(@PathVariable Long estadoId) {
+		Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
+
+		return estadoModelConverter.toModel(estado);
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Estado adicionar(@RequestBody @Valid Estado estado) {
+	public Estado adicionar(@RequestBody @Valid EstadoInput estadoInput) {
+		Estado estado = estadoModelObjectConverter.toDomainObject(estadoInput);
+
 		return cadastroEstado.salvar(estado);
 	}
 	
 	@PutMapping("/{estadoId}")
-	public Estado atualizar(@PathVariable Long estadoId, @RequestBody @Valid Estado estado) {
+	public Estado atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoInput estadoInput) {
 
 		Estado estadoAtual = cadastroEstado.buscarOuFalhar(estadoId);
 
-		BeanUtils.copyProperties(estado, estadoAtual, "id");
+		estadoModelObjectConverter.copyToDomainObject(estadoInput, estadoAtual);
+
 		return cadastroEstado.salvar(estadoAtual);
 		
 	}
