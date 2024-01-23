@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.algaworks.algafood.api.converter.CidadeModelConverter;
+import com.algaworks.algafood.api.converter.CidadeModelObjectConverter;
+import com.algaworks.algafood.api.model.CidadeModel;
+import com.algaworks.algafood.api.model.input.CidadeInput;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,35 +36,45 @@ public class CidadeController {
 	
 	@Autowired
 	private CadastroCidadeService cadastroCidade;
+
+	@Autowired
+	private CidadeModelConverter cidadeModelConverter;
+
+	@Autowired
+	private CidadeModelObjectConverter cidadeModelObjectConverter;
 		
 	@GetMapping
-	public List<Cidade> listar() {
-		return cidadeRepository.findAll();
+	public List<CidadeModel> listar() {
+		return cidadeModelConverter.toCollectionModel(cidadeRepository.findAll());
 	}
 	
 	@GetMapping("/{cidadeId}")
-	public Cidade buscar(@PathVariable Long cidadeId) {
-		return cadastroCidade.buscarOuFalhar(cidadeId);
+	public CidadeModel buscar(@PathVariable Long cidadeId) {
+		return cidadeModelConverter.toModel(cadastroCidade.buscarOuFalhar(cidadeId));
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cidade adicionar(@RequestBody @Valid Cidade cidade) {
+	public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
 		
 		try {
-			return cadastroCidade.salvar(cidade);
+			Cidade cidade = cidadeModelObjectConverter.toDomainObject(cidadeInput);
+
+			 return cidadeModelConverter.toModel(cadastroCidade.salvar(cidade));
+
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
 	
 	@PutMapping("/{cidadeId}")
-	public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody @Valid Cidade cidade) {		
+	public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
 		
 		try {
 
-			Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);			
-			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+			Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
+
+			cidadeModelObjectConverter.copyToDomainObject(cidadeInput, cidadeAtual);
 			
 			return cadastroCidade.salvar(cidadeAtual);
 			
