@@ -8,6 +8,6 @@ import lombok.Setter;
 public class EstadoModel {
 
     private Long id;
-
     private String nome;
+
 }

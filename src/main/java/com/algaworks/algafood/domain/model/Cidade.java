@@ -13,13 +13,13 @@ import javax.validation.groups.Default;
 
 import com.algaworks.algafood.core.validation.Groups;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Getter
-@Setter
 @Entity
 public class Cidade {
 	
