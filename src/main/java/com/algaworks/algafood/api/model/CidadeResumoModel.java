@@ -9,6 +9,6 @@ public class CidadeResumoModel {
 
     public Long id;
     public String nome;
-    public String nomeEstado;
+    public String estado;
 
 }
