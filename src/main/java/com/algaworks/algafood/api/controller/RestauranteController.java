@@ -13,6 +13,8 @@ import com.algaworks.algafood.api.converter.RestauranteModelObjectConverter;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.CozinhaIdInput;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
+import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +75,7 @@ public class RestauranteController {
 			Restaurante restaurante = restauranteModelObjectConverter.toDomainObject(restauranteInput);
 
 			return restauranteModelConverter.toModel(cadastroRestaurante.salvar(restaurante));
-		} catch (EntidadeNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 	}
@@ -88,7 +90,7 @@ public class RestauranteController {
 			restauranteModelObjectConverter.copyToDomainObject(restauranteInput, restauranteAtual);
 
 			return restauranteModelConverter.toModel(cadastroRestaurante.salvar(restauranteAtual));
-		} catch (EntidadeNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 
