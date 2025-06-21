@@ -87,5 +87,9 @@ public class Restaurante {
 		setAtivo(false);
 	}
 
+	private void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
 
 }
