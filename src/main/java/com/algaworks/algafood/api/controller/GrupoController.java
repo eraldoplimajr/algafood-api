@@ -1,5 +1,8 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.converter.GrupoModelConverter;
+import com.algaworks.algafood.api.converter.GrupoModelObjectConverter;
+import com.algaworks.algafood.api.model.GrupoModel;
 import com.algaworks.algafood.api.model.input.GrupoInput;
 import com.algaworks.algafood.domain.model.Grupo;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
@@ -18,32 +21,45 @@ public class GrupoController {
     @Autowired
     CadastroGrupoService cadastroGrupo;
 
+    @Autowired
+    GrupoModelConverter grupoModelConverter;
+
+    @Autowired
+    GrupoModelObjectConverter grupoModelObjectConverter;
+
     @GetMapping
-    public List<Grupo> listarGrupos() {
-        return cadastroGrupo.listarGrupos();
+    public List<GrupoModel> listarGrupos() {
+        return grupoModelConverter.toCollectionModel(cadastroGrupo.listarGrupos());
     }
 
     @GetMapping("/{grupoId}")
-    public ResponseEntity<Grupo> buscarGrupo(@PathVariable Long grupoId) {
-        Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
-        return ResponseEntity.ok(grupo);
+    public GrupoModel buscarGrupo(@PathVariable Long grupoId) {
+        return grupoModelConverter.toModel(cadastroGrupo.buscarOuFalhar(grupoId));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Grupo incluirGrupo(@RequestBody @Valid GrupoInput grupoInput) {
-        return cadastroGrupo.incluir(grupoInput);
+    public GrupoModel adicionar(@RequestBody @Valid GrupoInput grupoInput) {
+
+        Grupo grupo = grupoModelObjectConverter.toDomainObject(grupoInput);
+
+        return grupoModelConverter.toModel(cadastroGrupo.salvar(grupo));
     }
 
     @PutMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Grupo> atualizar(@PathVariable Long grupoId, @RequestBody @Valid GrupoInput grupoInput) {
-        return ResponseEntity.ok(cadastroGrupo.atualizar(grupoId, grupoInput));
+    public GrupoModel atualizar(@PathVariable Long grupoId, @RequestBody @Valid GrupoInput grupoInput) {
+
+        Grupo grupoAtual = cadastroGrupo.buscarOuFalhar(grupoId);
+
+        grupoModelObjectConverter.copyToDomainObject(grupoInput, grupoAtual);
+
+        return grupoModelConverter.toModel(cadastroGrupo.salvar(grupoAtual));
     }
 
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluirGrupo(@PathVariable Long grupoId) {
+    public void remover(@PathVariable Long grupoId) {
         cadastroGrupo.excluir(grupoId);
     }
 
