@@ -24,10 +24,6 @@ public class CadastroUsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Usuario buscar(Long usuarioId) {
-        return buscarOuFalhar(usuarioId);
-    }
-
     @Transactional
     public Usuario salvar(Usuario usuario) {
         return usuarioRepository.save(usuario);
