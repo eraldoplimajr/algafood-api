@@ -1,7 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.SenhaInvalidaException;
+import com.algaworks.algafood.domain.exception.SenhaNaoCoincideException;
 import com.algaworks.algafood.domain.exception.UsuarioNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
@@ -53,7 +53,7 @@ public class CadastroUsuarioService {
         Usuario usuario = buscarOuFalhar(usuarioId);
 
         if (usuario.senhaAtualNaoCoincide(senhaAtual)) {
-            throw new SenhaInvalidaException();
+            throw new SenhaNaoCoincideException();
         }
 
         usuario.setSenha(novaSenha);
