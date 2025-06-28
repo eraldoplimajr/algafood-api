@@ -1,8 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
 import com.algaworks.algafood.api.converter.GrupoModelConverter;
-import com.algaworks.algafood.api.model.input.GrupoInput;
-import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.GrupoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Grupo;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CadastroGrupoService {
