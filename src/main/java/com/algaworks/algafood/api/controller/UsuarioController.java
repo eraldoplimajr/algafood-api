@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.controller;
 import com.algaworks.algafood.api.converter.UsuarioModelConverter;
 import com.algaworks.algafood.api.converter.UsuarioModelObjectConverter;
 import com.algaworks.algafood.api.model.UsuarioModel;
+import com.algaworks.algafood.api.model.input.UsuarioComSenhaInput;
 import com.algaworks.algafood.api.model.input.UsuarioInput;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
@@ -39,7 +40,7 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioModel adicionar(@RequestBody @Valid UsuarioInput usuarioInput) {
+    public UsuarioModel adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
         Usuario usuario = usuarioModelObjectConverter.toDomainObject(usuarioInput);
 
         return usuarioModelConverter.toModel(cadastroUsuario.salvar(usuario));
