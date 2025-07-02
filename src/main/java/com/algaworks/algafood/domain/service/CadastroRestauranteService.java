@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
 import com.algaworks.algafood.domain.model.Cidade;
+import com.algaworks.algafood.domain.model.FormaPagamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class CadastroRestauranteService {
 
 	@Autowired
 	private CadastroCidadeService cadastroCidade;
+
+	@Autowired
+	private FormaPagamentoService cadastroFormaPagamento;
 
 	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
@@ -63,6 +67,22 @@ public class CadastroRestauranteService {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
 
 		restauranteAtual.inativar();
+	}
+
+	@Transactional
+	public void desassociarFormaPagamento(Long restaurantId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restaurantId);
+		FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
+
+		restaurante.removarFormaPagamento(formaPagamento);
+	}
+
+	@Transactional
+	public void associarFormaPagamento(Long restaurantId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restaurantId);
+		FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
+
+		restaurante.adicionarFormaPagamento(formaPagamento);
 	}
 
 	public Restaurante buscarOuFalhar(Long restauranteId) {
