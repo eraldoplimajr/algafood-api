@@ -74,7 +74,7 @@ public class CadastroRestauranteService {
 		Restaurante restaurante = buscarOuFalhar(restaurantId);
 		FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
 
-		restaurante.removarFormaPagamento(formaPagamento);
+		restaurante.removerFormaPagamento(formaPagamento);
 	}
 
 	@Transactional
