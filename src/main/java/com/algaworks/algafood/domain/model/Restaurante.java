@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.model;
 
 import com.algaworks.algafood.core.validation.ValorZeroIncluiDescricao;
+import com.algaworks.algafood.domain.exception.ProdutoNaoEncontradoException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,10 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome",
 		descricaoObrigatoria = "Frete Grátis")
@@ -75,6 +73,19 @@ public class Restaurante {
 
 	public boolean adicionarFormaPagamento(FormaPagamento formaPagamento) {
 		return formasPagamento.add(formaPagamento);
+	}
+
+	public Optional<Produto> buscar(Long produtoId) {
+		return produtos.stream()
+				.filter(prod -> prod.getId().equals(produtoId)).findFirst();
+	}
+
+	public void adicionarProduto(Produto produto) {
+		produtos.add(produto);
+	}
+
+	public void removerProduto(Produto produto) {
+		produtos.remove(produto);
 	}
 
 }
