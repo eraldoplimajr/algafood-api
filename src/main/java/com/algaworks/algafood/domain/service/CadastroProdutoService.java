@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,13 +28,15 @@ public class CadastroProdutoService {
         Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
         Optional<Produto> optionalProduto = restaurante.buscar(produtoId);
 
-        return optionalProduto.orElseThrow(() -> new  ProdutoNaoEncontradoException(produtoId));
+        return optionalProduto.orElseThrow(() -> new  ProdutoNaoEncontradoException(restauranteId, produtoId));
     }
 
     @Transactional
-    public Produto incluir(Restaurante restaurante, Produto produto) {
-        restaurante.adicionarProduto(produto);
-        produto.setRestaurante(restaurante);
+    public Produto incluir(Produto produto) {
         return produtoRespository.save(produto);
+    }
+
+    public Produto buscarOuFalhar(Long produtoId, Long restauranteId) {
+        return produtoRespository.findById(restauranteId, produtoId).orElseThrow(() -> new ProdutoNaoEncontradoException(restauranteId, produtoId));
     }
 }

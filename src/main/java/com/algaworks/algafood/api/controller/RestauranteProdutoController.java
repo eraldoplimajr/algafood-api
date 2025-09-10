@@ -48,7 +48,10 @@ public class RestauranteProdutoController {
     public ProdutoModel incluir(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoInput produtoInput) {
 
         Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
-        Produto produto = cadastroProdutoService.incluir(restaurante, produtoObjectConverter.toDomainObject(produtoInput));
+
+        Produto produto = produtoObjectConverter.toDomainObject(produtoInput);
+        produto.setRestaurante(restaurante);
+        produto = cadastroProdutoService.incluir(produto);
 
         return produtoModelConverter.toModel(produto);
     }
@@ -56,15 +59,14 @@ public class RestauranteProdutoController {
     @PutMapping("/{produtoId}")
     public ProdutoModel alterar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoInput produtoInput) {
 
-        Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
-        Produto produtoAtual = cadastroProdutoService.buscar(restauranteId, produtoId);
+        Produto produtoAtual = cadastroProdutoService.buscarOuFalhar(produtoId, restauranteId);
+
         produtoObjectConverter.copyToDomainObject(produtoInput, produtoAtual);
-        Produto produto = cadastroProdutoService.incluir(restaurante, produtoAtual);
+
+        Produto produto = cadastroProdutoService.incluir(produtoAtual);
 
         return produtoModelConverter.toModel(produto);
 
     }
-
-
 
 }
