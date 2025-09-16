@@ -1,3 +1,0 @@
-ALTER TABLE restaurante_forma_pagamento
-ADD CONSTRAINT restaurante_forma_pagamento_PK
-PRIMARY KEY (restaurante_id, forma_pagamento_id);

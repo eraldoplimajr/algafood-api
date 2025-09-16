@@ -23,6 +23,7 @@ public class RestauranteModel {
     @JsonView(RestauranteView.Resumo.class)
     private CozinhaModel cozinha;
     private Boolean ativo;
+    private Boolean aberto;
     private EnderecoModel endereco;
 
 }

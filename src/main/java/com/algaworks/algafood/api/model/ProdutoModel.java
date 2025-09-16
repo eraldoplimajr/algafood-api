@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Setter
 public class ProdutoModel {
 
-    private Long produtoId;
+    private Long id;
     private String nome;
     private String descricao;
     private BigDecimal preco;
