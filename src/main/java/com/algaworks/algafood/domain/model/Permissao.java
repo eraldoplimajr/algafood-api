@@ -1,17 +1,16 @@
 package com.algaworks.algafood.domain.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.*;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Getter
-@Setter
+@Data
 @Entity
 public class Permissao {
 
+	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Long id;

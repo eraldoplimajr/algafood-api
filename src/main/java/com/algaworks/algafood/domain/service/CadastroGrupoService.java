@@ -4,6 +4,7 @@ import com.algaworks.algafood.api.converter.GrupoModelConverter;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.GrupoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Grupo;
+import com.algaworks.algafood.domain.model.Permissao;
 import com.algaworks.algafood.domain.repository.GrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,6 +24,9 @@ public class CadastroGrupoService {
 
     @Autowired
     GrupoModelConverter grupoModelConverter;
+
+    @Autowired
+    private CadastroPermissaoService cadastroPermissao;
 
     public List<Grupo> listarGrupos() {
         return grupoRepository.findAll();
@@ -56,6 +60,27 @@ public class CadastroGrupoService {
             throw new EntidadeEmUsoException(String.format(MSG_GRUPO_EM_USO, grupoId));
         }
 
+    }
 
+    public List<Permissao> listarPermissoes(Long grupoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+
+        return grupo.getPermissoes();
+    }
+
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+
+        grupo.removerPermissao(permissao);
+    }
+
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+
+        grupo.adicionarPermissao(permissao);
     }
 }

@@ -24,6 +24,7 @@ alter table permissao auto_increment = 1;
 alter table produto auto_increment = 1;
 alter table restaurante auto_increment = 1;
 alter table usuario auto_increment = 1;
+alter table permissao auto_increment = 1;
 
 insert into cozinha (id, nome) values (1, 'Tailandesa');
 insert into cozinha (id, nome) values (2, 'Indiana');
@@ -77,3 +78,5 @@ insert into usuario (nome, email, senha, data_cadastro) values ('João da Silva'
 insert into usuario (nome, email, senha, data_cadastro) values ('Maria Joaquina', 'maria.vnd@algafood.com', '123', utc_timestamp);
 insert into usuario (nome, email, senha, data_cadastro) values ('José Souza', 'jose.aux@algafood.com.br', '123', utc_timestamp);
 insert into usuario (nome, email, senha, data_cadastro) values ('Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp);
+
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
