@@ -16,4 +16,8 @@ public class PermissaoObjectConverter {
         return modelMapper.map(permissaoInput, Permissao.class);
     }
 
+    public void copyToDomainObject(PermissaoInput permissaoInput, Permissao permissaoAtual) {
+        modelMapper.map(permissaoInput,permissaoAtual);
+    }
+
 }

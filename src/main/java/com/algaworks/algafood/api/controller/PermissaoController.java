@@ -38,16 +38,26 @@ public class PermissaoController {
         return permissaoConverter.toModel(cadastroPermissao.buscarOuFalhar(permissaoId));
     }
 
-    @PutMapping
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PermissaoModel incluir(@RequestBody @Valid PermissaoInput permissaoInput) {
         Permissao permissao = permissaoObjectConverter.toDomainObject(permissaoInput);
-        return permissaoConverter.toModel(cadastroPermissao.adicionar(permissao));
+        return permissaoConverter.toModel(cadastroPermissao.salvar(permissao));
+    }
+
+    @PutMapping("/{permissaoId}")
+    @ResponseStatus(HttpStatus.OK)
+    public PermissaoModel atualizar(@PathVariable Long permissaoId, @RequestBody @Valid PermissaoInput permissaoInput) {
+
+        Permissao permissaoAtual = cadastroPermissao.buscarOuFalhar(permissaoId);
+        permissaoObjectConverter.copyToDomainObject(permissaoInput, permissaoAtual);
+
+        return permissaoConverter.toModel(cadastroPermissao.salvar(permissaoAtual));
     }
 
 
     @DeleteMapping("/{permissaoId}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long permissaoId) {
         cadastroPermissao.remover(permissaoId);
     }

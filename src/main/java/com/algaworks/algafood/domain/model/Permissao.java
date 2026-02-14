@@ -1,8 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,8 +11,8 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Permissao {
-	
-	@EqualsAndHashCode.Include
+
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Long id;
 	
