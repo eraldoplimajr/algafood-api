@@ -2,7 +2,7 @@ create table forma_pagamento (id bigint not null auto_increment, descricao varch
 create table foto_produto (id bigint not null auto_increment, content_type varchar(60), descricao varchar(60), nome varchar(60), tamanho bigint, primary key (id)) engine=InnoDB default charset=utf8;
 create table grupo (id bigint not null auto_increment, nome varchar(80), primary key (id)) engine=InnoDB default charset=utf8;
 create table grupo_permissao (grupo_id bigint not null, permissao_id bigint not null) engine=InnoDB default charset=utf8;
-create table permissao (id bigint not null, descricao varchar(80) not null, nome varchar(80) not null, primary key (id)) engine=InnoDB default charset=utf8;
+create table permissao (id bigint not null auto_increment, descricao varchar(80) not null, nome varchar(80) not null, primary key (id)) engine=InnoDB default charset=utf8;
 create table produto (id bigint not null auto_increment, ativo bit, descricao varchar(255), nome varchar(80), preco decimal(19,2), restaurante_id bigint not null, primary key (id)) engine=InnoDB default charset=utf8;
 create table restaurante (id bigint not null auto_increment, data_atualizacao datetime not null, data_cadastro datetime not null, endereco_bairro varchar(80), endereco_cep varchar(80), endereco_complemento varchar(80), endereco_logradouro varchar(80), endereco_numero varchar(80), nome varchar(80), taxa_frete decimal(19,2) not null, cozinha_id bigint not null, endereco_cidade_id bigint, primary key (id)) engine=InnoDB default charset=utf8;
 create table restaurante_forma_pagamento (restaurante_id bigint not null, forma_pagamento_id bigint not null) engine=InnoDB default charset=utf8;
