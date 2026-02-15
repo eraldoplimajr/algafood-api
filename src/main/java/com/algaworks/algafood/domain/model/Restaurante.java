@@ -1,7 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
 import com.algaworks.algafood.core.validation.ValorZeroIncluiDescricao;
-import com.algaworks.algafood.domain.exception.ProdutoNaoEncontradoException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -102,6 +101,14 @@ public class Restaurante {
 
 	public void removerProduto(Produto produto) {
 		produtos.remove(produto);
+	}
+
+	public boolean adicionarResponsavel(Usuario usuario) {
+		return getResponsaveis().add(usuario);
+	}
+
+	public boolean removerResponsavel(Usuario usuario) {
+		return getResponsaveis().remove(usuario);
 	}
 
 }
