@@ -1,7 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
 import com.algaworks.algafood.api.converter.PedidoConverter;
+import com.algaworks.algafood.api.converter.PedidoResumoModelConverter;
 import com.algaworks.algafood.api.model.PedidoModel;
+import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.domain.service.CadastroPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,13 @@ public class PedidoController {
     @Autowired
     private PedidoConverter pedidoConverter;
 
+    @Autowired
+    private PedidoResumoModelConverter pedidoResumoModelConverter;
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<PedidoModel> listar() {
-        return pedidoConverter.toCollectionModel(cadastroPedido.listarTodos());
+    public List<PedidoResumoModel> listar() {
+        return pedidoResumoModelConverter.toCollectionModel(cadastroPedido.listarTodos());
     }
 
     @GetMapping("/{pedidoId}")

@@ -1,7 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,7 @@ public class Pedido {
 	private OffsetDateTime dataCancelamento;
 	private OffsetDateTime dataEntrega;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	private FormaPagamento formaPagamento;
 
