@@ -5,7 +5,7 @@ import com.algaworks.algafood.api.converter.FormaPagamentoObjectConverter;
 import com.algaworks.algafood.api.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.model.input.FormaPagamentoInput;
 import com.algaworks.algafood.domain.model.FormaPagamento;
-import com.algaworks.algafood.domain.service.FormaPagamentoService;
+import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ import java.util.List;
 public class FormaPagamentoController {
 
     @Autowired
-    private FormaPagamentoService formaPagamentoService;
+    private CadastroFormaPagamentoService formaPagamentoService;
 
     @Autowired
     private FormaPagamentoConverter formaPagamentoConverter;

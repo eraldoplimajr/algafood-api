@@ -24,7 +24,7 @@ public class CadastroRestauranteService {
 	private CadastroCidadeService cadastroCidade;
 
 	@Autowired
-	private FormaPagamentoService cadastroFormaPagamento;
+	private CadastroFormaPagamentoService cadastroFormaPagamento;
 
 	@Autowired
 	private CadastroUsuarioService cadastroUsuario;
