@@ -1,14 +1,18 @@
 package com.algaworks.algafood.api.controller;
 
 import com.algaworks.algafood.api.converter.PedidoConverter;
+import com.algaworks.algafood.api.converter.PedidoModelObjectConverter;
 import com.algaworks.algafood.api.converter.PedidoResumoModelConverter;
 import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
+import com.algaworks.algafood.api.model.input.PedidoInput;
+import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.service.CadastroPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,6 +28,9 @@ public class PedidoController {
     @Autowired
     private PedidoResumoModelConverter pedidoResumoModelConverter;
 
+    @Autowired
+    private PedidoModelObjectConverter pedidoModelObjectConverter;
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<PedidoResumoModel> listar() {
@@ -34,6 +41,15 @@ public class PedidoController {
     @ResponseStatus(HttpStatus.OK)
     public PedidoModel buscar(@PathVariable Long pedidoId) {
         return pedidoConverter.toModel(cadastroPedido.buscarOuFalhar(pedidoId));
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PedidoModel emitir(@RequestBody @Valid PedidoInput pedidoInput) {
+
+        Pedido pedidoNovo = pedidoModelObjectConverter.toDomainObject(pedidoInput);
+
+        return pedidoConverter.toModel(cadastroPedido.emitirPedido(pedidoNovo));
     }
 
 }
