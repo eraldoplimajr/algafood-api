@@ -7,7 +7,7 @@ import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.PedidoInput;
 import com.algaworks.algafood.domain.model.Pedido;
-import com.algaworks.algafood.domain.service.CadastroPedidoService;
+import com.algaworks.algafood.domain.service.EmissaoPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ import java.util.List;
 public class PedidoController {
 
     @Autowired
-    private CadastroPedidoService cadastroPedido;
+    private EmissaoPedidoService cadastroPedido;
 
     @Autowired
     private PedidoConverter pedidoConverter;
