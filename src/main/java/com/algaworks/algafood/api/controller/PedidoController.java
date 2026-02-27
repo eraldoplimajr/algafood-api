@@ -37,10 +37,10 @@ public class PedidoController {
         return pedidoResumoModelConverter.toCollectionModel(cadastroPedido.listarTodos());
     }
 
-    @GetMapping("/{pedidoId}")
+    @GetMapping("/{codigoPedido}")
     @ResponseStatus(HttpStatus.OK)
-    public PedidoModel buscar(@PathVariable Long pedidoId) {
-        return pedidoConverter.toModel(cadastroPedido.buscarOuFalhar(pedidoId));
+    public PedidoModel buscar(@PathVariable String codigoPedido) {
+        return pedidoConverter.toModel(cadastroPedido.buscarOuFalhar(codigoPedido));
     }
 
     @PostMapping
