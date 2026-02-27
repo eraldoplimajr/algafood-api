@@ -47,11 +47,8 @@ public class CadastroPedidoService {
         validarDadosPedido(pedido);
         validarItensPedido(pedido);
 
-        FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(pedido.getFormaPagamento().getId());
-        if(!pedido.getRestaurante().getFormasPagamento().contains(formaPagamento)) {
-            throw new NegocioException(String.format("A forma de pagamento %s não é aceita pelo restaurante de código %d",
-                    formaPagamento.getDescricao(), pedido.getRestaurante().getId()));
-        }
+        pedido.setTaxaFrete(pedido.getRestaurante().getTaxaFrete());
+        pedido.calcularValorTotal();
 
         return pedidoRepository.save(pedido);
     }
@@ -65,46 +62,33 @@ public class CadastroPedidoService {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(pedido.getRestaurante().getId());
         Usuario usuario = cadastroUsuario.buscarOuFalhar(pedido.getCliente().getId());
         Cidade cidade = cadastroCidade.buscarOuFalhar(pedido.getEnderecoEntrega().getCidade().getId());
+        FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(pedido.getFormaPagamento().getId());
 
         pedido.setRestaurante(restaurante);
         pedido.setCliente(usuario);
         pedido.getEnderecoEntrega().setCidade(cidade);
-        pedido.setTaxaFrete(restaurante.getTaxaFrete());
+
+        if (restaurante.naoAceitaFormaPagamento(formaPagamento)) {
+            throw new NegocioException(String.format("Forma de pagamento '%s' não é aceita por esse restaurante.",
+                    formaPagamento.getDescricao()));
+        }
 
         return pedido;
     }
 
     private void validarItensPedido(Pedido pedido) {
 
-        BigDecimal totalPedido = BigDecimal.ZERO;
-        for(ItemPedido itemPedido : pedido.getItens()) {
-            Produto produto = cadastroProduto.buscarOuFalhar(itemPedido.getProduto().getId(), pedido.getRestaurante().getId());
+        pedido.getItens().forEach(item -> {
+            log.info("Codigo do Restaurante pedido.getRestaurante().getId() -> " + pedido.getRestaurante().getId());
+            log.info("Codigo do produto item.getProduto().getId() -> " + item.getProduto().getId());
+            Produto produto = cadastroProduto.buscarOuFalhar(
+                    pedido.getRestaurante().getId(), item.getProduto().getId());
 
-            BigDecimal precoProduto = produto.getPreco();
-            log.info(String.format("Preço do produto %s = %.2f", produto.getNome(), produto.getPreco()));
-            Integer quantidade = itemPedido.getQuantidade();
-            log.info("A quantidade desse produto é: " + quantidade);
-            totalPedido = totalPedido.add(precoProduto.multiply(new BigDecimal(quantidade)));
-            log.info(String.format("O valor total do pedido está sendo %.2f", totalPedido));
-
-        }
-        /*
-        pedido.getItens().forEach(i -> {
-            Produto produto = cadastroProduto.buscarOuFalhar(i.getProduto().getId(), pedido.getRestaurante().getId());
-            pedido.setValorTotal(pedido.getValorTotal().add(produto.getPreco().multiply(new BigDecimal(i.getQuantidade()))));
-        } );
-        */
-        pedido.setSubtotal(totalPedido);
-        log.info(String.format("O subtotaldo pedido é: %.2f", pedido.getSubtotal()));
-        log.info(String.format("O valor da taxa frete do restaurante é: %.2f", pedido.getRestaurante().getTaxaFrete()));
-        totalPedido = pedido.getRestaurante().getTaxaFrete().add(totalPedido);
-        log.info(String.format("O valor total do pedido é: %.2f", totalPedido));
-        pedido.setValorTotal(totalPedido);
-        pedido.setValorTotal(totalPedido);
-        log.info(String.format("O valor FINAL do pedido é: %.2f", pedido.getValorTotal()));
-
+            item.setPedido(pedido);
+            item.setProduto(produto);
+            item.setPrecoUnitario(produto.getPreco());
+        });
 
     }
-
 
 }

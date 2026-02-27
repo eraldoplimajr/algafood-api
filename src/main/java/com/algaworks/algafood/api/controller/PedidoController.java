@@ -49,7 +49,9 @@ public class PedidoController {
 
         Pedido pedidoNovo = pedidoModelObjectConverter.toDomainObject(pedidoInput);
 
-        return pedidoConverter.toModel(cadastroPedido.emitirPedido(pedidoNovo));
+        pedidoNovo = cadastroPedido.emitirPedido(pedidoNovo);
+
+        return pedidoConverter.toModel(pedidoNovo);
     }
 
 }
