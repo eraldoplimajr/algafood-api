@@ -7,7 +7,10 @@ import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.PedidoInput;
 import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.repository.PedidoRepository;
+import com.algaworks.algafood.domain.repository.filter.PedidoFilter;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
+import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +33,9 @@ public class PedidoController {
 
     @Autowired
     private PedidoModelObjectConverter pedidoModelObjectConverter;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
 /*
     @GetMapping
@@ -56,8 +62,10 @@ public class PedidoController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<PedidoResumoModel> listar() {
-        return pedidoResumoModelConverter.toCollectionModel(cadastroPedido.listarTodos());
+    public List<PedidoResumoModel> listar(PedidoFilter filtro) {
+        List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro));
+
+        return pedidoResumoModelConverter.toCollectionModel(todosPedidos);
     }
 
     @GetMapping("/{codigoPedido}")
