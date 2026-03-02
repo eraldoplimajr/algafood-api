@@ -35,6 +35,7 @@ public class PedidoController {
     @Autowired
     private PedidoModelObjectConverter pedidoModelObjectConverter;
 
+/*
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public MappingJacksonValue listar(@RequestParam(required = false) String campos) {
@@ -55,14 +56,13 @@ public class PedidoController {
 
         return pedidosWrapper;
     }
+*/
 
-/*
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<PedidoResumoModel> listar() {
         return pedidoResumoModelConverter.toCollectionModel(cadastroPedido.listarTodos());
     }
-*/
 
     @GetMapping("/{codigoPedido}")
     @ResponseStatus(HttpStatus.OK)
