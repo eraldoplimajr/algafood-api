@@ -1,6 +1,7 @@
 package com.algaworks.algafood.infrastructure.repository.spec;
 
 import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.repository.filter.PedidoFilter;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -11,8 +12,11 @@ public class PedidoSpecs {
 	
 	public static Specification<Pedido> usandoFiltro(PedidoFilter filtro) {
 		return (root, query, builder) -> {
-			root.fetch("restaurante").fetch("cozinha");
-			root.fetch("cliente");
+			if (Produto.class.equals(query.getResultType())) {
+				root.fetch("restaurante").fetch("cozinha");
+				root.fetch("cliente");
+			}
+
 			var predicates = new ArrayList<Predicate>();
 
 			if (filtro.getClienteId() != null) {
