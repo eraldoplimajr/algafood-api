@@ -5,17 +5,18 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 public class VendaDiariaFilter {
 
-    private Long restauraneId;
+    private Long restauranteId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDate dataCriacaoInicio;
+    private OffsetDateTime dataCriacaoInicio;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDate dataCriacaoFim;
+    private OffsetDateTime dataCriacaoFim;
 
 }
