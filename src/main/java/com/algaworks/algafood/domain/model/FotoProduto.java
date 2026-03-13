@@ -4,8 +4,6 @@ import javax.persistence.*;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Data
@@ -21,7 +19,7 @@ public class FotoProduto {
 	@MapsId
 	private Produto produto;
 	
-	private String nome;
+	private String nomeArquivo;
 	
 	private String descricao;
 	
