@@ -1,7 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
 import com.algaworks.algafood.domain.model.FotoProduto;
-import com.algaworks.algafood.domain.repository.ProdutoRespository;
+import com.algaworks.algafood.domain.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,20 +12,20 @@ import java.util.Optional;
 public class CatalogoFotoProdutoService {
 
     @Autowired
-    private ProdutoRespository produtoRespository;
+    private ProdutoRepository produtoRepository;
 
     @Transactional
     public FotoProduto salvar(FotoProduto foto) {
         Long restauranteId = foto.getRestauranteId();
         Long produtoId = foto.getProduto().getId();
 
-        Optional<FotoProduto> fotoExiste = produtoRespository.findFotoById(restauranteId, produtoId);
+        Optional<FotoProduto> fotoExiste = produtoRepository.findFotoById(restauranteId, produtoId);
 
         if (fotoExiste.isPresent()) {
-            produtoRespository.delete(fotoExiste.get());
+           produtoRepository.delete(fotoExiste.get());
         }
 
-        return produtoRespository.save(foto);
+        return produtoRepository.save(foto);
     }
 
 }
