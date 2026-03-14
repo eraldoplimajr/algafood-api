@@ -47,4 +47,11 @@ public class RestauranteProdutoFotoController {
         return fotoProdutoModelConverter.toModel(fotoSalva);
     }
 
+    @GetMapping
+    public FotoProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
+
+        return fotoProdutoModelConverter.toModel(catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId));
+    }
+
 }
