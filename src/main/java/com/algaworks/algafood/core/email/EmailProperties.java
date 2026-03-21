@@ -20,9 +20,19 @@ public class EmailProperties {
 
     private TipoEmail impl = TipoEmail.FAKE;
 
+    private Sandbox sandbox = new Sandbox();
+
     public enum TipoEmail {
 
-        FAKE, SMTP
+        FAKE, SMTP, SANDBOX
+
+    }
+
+    @Getter
+    @Setter
+    public class Sandbox {
+
+        private String destinatario;
 
     }
 
