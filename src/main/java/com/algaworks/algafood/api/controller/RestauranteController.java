@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -32,6 +31,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
@@ -53,21 +53,15 @@ public class RestauranteController {
 
 	@JsonView(RestauranteView.Resumo.class)
 	@GetMapping
-	public ResponseEntity<List<RestauranteModel>> listar() {
-		List<RestauranteModel> restaurantesModel = restauranteModelConverter.toCollectionModel(restauranteRepository.findAll());
-
-		return ResponseEntity.ok()
-				.header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-				.body(restaurantesModel);
+	public List<RestauranteModel> listar() {
+		return restauranteModelConverter.toCollectionModel(restauranteRepository.findAll());
 	}
 
-	/*
 	@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome")
 	public List<RestauranteModel> listarApenasNome() {
 		return listar();
 	}
-	 */
 
 	/*
 	@GetMapping
